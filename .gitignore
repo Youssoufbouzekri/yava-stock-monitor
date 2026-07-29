@@ -1,11 +1,18 @@
+# Python cache
 __pycache__/
 *.py[cod]
-*.egg-info/
-dist/
-build/
+
+# Virtual environments
 .venv/
 venv/
 env/
-state.json
-*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Pytest
+.pytest_cache/
+
+# OS
 .DS_Store
