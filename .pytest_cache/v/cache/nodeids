@@ -1,0 +1,19 @@
+[
+  "tests/test_shopify.py::TestExtractVariant::test_empty_variants_returns_none",
+  "tests/test_shopify.py::TestExtractVariant::test_finds_available_variant",
+  "tests/test_shopify.py::TestExtractVariant::test_malformed_json_missing_variants_key",
+  "tests/test_shopify.py::TestExtractVariant::test_missing_available_field_defaults_to_false",
+  "tests/test_shopify.py::TestExtractVariant::test_missing_variant_returns_none",
+  "tests/test_shopify.py::TestExtractVariant::test_stock_detection_in_stock",
+  "tests/test_shopify.py::TestExtractVariant::test_stock_detection_out_of_stock",
+  "tests/test_shopify.py::TestFetchProductJsonErrors::test_invalid_url_raises_error",
+  "tests/test_shopify.py::TestStateTransitions::test_get_previous_status_returns_none_for_new_variant",
+  "tests/test_shopify.py::TestStateTransitions::test_get_previous_status_returns_value",
+  "tests/test_shopify.py::TestStateTransitions::test_load_state_handles_corrupted_json",
+  "tests/test_shopify.py::TestStateTransitions::test_load_state_returns_content",
+  "tests/test_shopify.py::TestStateTransitions::test_load_state_returns_empty_when_file_missing",
+  "tests/test_shopify.py::TestStateTransitions::test_save_and_load_roundtrip",
+  "tests/test_shopify.py::TestStateTransitions::test_update_state_overwrites",
+  "tests/test_shopify.py::TestStateTransitions::test_update_state_sets_value",
+  "tests/test_shopify.py::TestVariantInfoDataclass::test_variant_info_creation"
+]
