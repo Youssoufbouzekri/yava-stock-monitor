@@ -25,13 +25,13 @@ class VariantInfo:
     option_name: str = ""
 
 
-def _build_js_url(config: Config) -> str:
-    base = config.product_url.split("?")[0].rstrip("/")
+def _build_js_url(product_url: str) -> str:
+    base = product_url.split("?")[0].rstrip("/")
     return f"{base}.js"
 
 
-def fetch_product_json(config: Config) -> Dict[str, Any]:
-    url = _build_js_url(config)
+def fetch_product_json(product_url: str, config: Config) -> Dict[str, Any]:
+    url = _build_js_url(product_url)
     logger.info("Fetching product JSON from %s", url)
 
     session = requests.Session()
@@ -124,13 +124,13 @@ def extract_variant(
     return None
 
 
-def get_variant_status(config: Config, variant_id: int) -> VariantInfo:
-    product_data = fetch_product_json(config)
+def get_variant_status(config: Config, variant_id: int, product_url: str) -> VariantInfo:
+    product_data = fetch_product_json(product_url, config)
     variant = extract_variant(product_data, variant_id)
 
     if variant is None:
         raise ShopifyError(
-            f"Variant {variant_id} not found in product '{config.product_handle}'"
+            f"Variant {variant_id} not found in product at '{product_url}'"
         )
 
     return variant

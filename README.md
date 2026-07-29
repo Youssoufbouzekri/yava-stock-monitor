@@ -52,17 +52,31 @@ TELEGRAM_BOT_TOKEN="your-token" TELEGRAM_CHAT_ID="your-chat-id" python src/monit
 python src/monitor.py --dry-run --verbose
 ```
 
-## Customize for Another Product
+## Customize for Another Product / Variant
 
-Edit `src/config.py`:
+Edit `src/products.py`:
 
 ```python
-product_url = "https://shop.com/products/my-product?variant=123456"
-product_handle = "my-product"
-variant_ids = [123456]
-product_title = "My Product"
-variant_names = {123456: "Flavor Name"}
+PRODUCTS = [
+    {
+        "name": "Pure ISO Whey 2 KG",
+        "url": "https://www.yavalabs.ae/products/pure-iso-whey-2-kg",
+        "variants": [
+            {"name": "Banana", "id": 46692232495329},
+            {"name": "Vanilla", "id": 46692232462561},
+        ],
+    },
+    {
+        "name": "Another Product",
+        "url": "https://www.yavalabs.ae/products/another-product",
+        "variants": [
+            {"name": "Strawberry", "id": 123456789},
+        ],
+    },
+]
 ```
+
+You can add unlimited products, each with unlimited variants.
 
 ## Project Structure
 
@@ -72,9 +86,11 @@ variant_names = {123456: "Flavor Name"}
 │   ├── config.py    # Configuration dataclass
 │   ├── monitor.py   # Entry point with CLI
 │   ├── notifier.py  # Telegram sender
+│   ├── products.py  # Product & variant definitions
 │   ├── shopify.py   # Shopify API client
 │   └── state.py     # Persistent state manager
 ├── tests/
+│   ├── test_products.py
 │   └── test_shopify.py
 ├── requirements.txt
 ├── state.json       # Tracks last known status
@@ -85,5 +101,5 @@ variant_names = {123456: "Flavor Name"}
 
 - **Workflow not running**: Verify secrets are set and Actions are enabled
 - **No notification received**: Check the workflow logs for errors
-- **"Variant not found"**: Verify the variant ID and product handle in `config.py`
+- **"Variant not found"**: Verify the variant ID and product URL in `src/products.py`
 - **Rate limited**: The script retries with exponential backoff automatically

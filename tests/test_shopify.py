@@ -154,11 +154,7 @@ class TestFetchProductJsonErrors:
     def test_invalid_url_raises_error(self, monkeypatch):
         from src import config as cfg_module
 
-        cfg = cfg_module.Config(
-            product_handle="this-does-not-exist-12345",
-            product_url="https://www.yavalabs.ae/products/this-does-not-exist-12345",
-            variant_ids=[1],
-            max_retries=1,
-        )
+        cfg = cfg_module.Config(max_retries=1)
+        url = "https://www.yavalabs.ae/products/this-does-not-exist-12345"
         with pytest.raises(ShopifyError):
-            fetch_product_json(cfg)
+            fetch_product_json(url, cfg)

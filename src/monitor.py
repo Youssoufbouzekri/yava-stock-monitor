@@ -7,6 +7,7 @@ from typing import Dict, List
 
 from src.config import Config
 from src.notifier import send_telegram_notification
+from src.products import PRODUCTS
 from src.shopify import get_variant_status
 from src.state import get_previous_status, load_state, save_state, update_state
 
@@ -27,9 +28,13 @@ def setup_logging(verbose: bool) -> None:
 
 
 def check_variant(
-    config: Config, variant_id: int, state: Dict[str, str]
+    config: Config, variant: dict, product: dict, state: Dict[str, str]
 ) -> bool:
-    variant_info = get_variant_status(config, variant_id)
+    variant_id: int = variant["id"]
+    product_url: str = product["url"]
+    variant_url = f"{product_url}?variant={variant_id}"
+
+    variant_info = get_variant_status(config, variant_id, product_url)
 
     current_status = "in_stock" if variant_info.available else "out_of_stock"
     previous_status = get_previous_status(state, variant_id)
@@ -45,16 +50,15 @@ def check_variant(
             variant_id,
             variant_info.title,
         )
-        flavor = config.variant_names.get(variant_id, variant_info.title)
         if not config.dry_run:
             send_telegram_notification(
                 config,
-                config.product_title,
-                flavor,
-                config.product_url,
+                product["name"],
+                variant["name"],
+                variant_url,
             )
         else:
-            logger.info("[DRY-RUN] Would send notification for %s", flavor)
+            logger.info("[DRY-RUN] Would send notification for %s", variant["name"])
         notified = True
 
     elif previous_status == current_status:
@@ -77,18 +81,21 @@ def check_variant(
     return notified
 
 
-def check_all_variants(config: Config) -> bool:
+def check_all_products(config: Config) -> bool:
     state = load_state(config.state_file)
     any_notified = False
 
-    for variant_id in config.variant_ids:
-        try:
-            notified = check_variant(config, variant_id, state)
-            if notified:
-                any_notified = True
-        except Exception as e:
-            logger.error("Failed to check variant %d: %s", variant_id, e)
-            raise
+    for product in PRODUCTS:
+        logger.info("Checking product: %s (%s)", product["name"], product["url"])
+        for variant in product["variants"]:
+            variant_id: int = variant["id"]
+            try:
+                notified = check_variant(config, variant, product, state)
+                if notified:
+                    any_notified = True
+            except Exception as e:
+                logger.error("Failed to check variant %d: %s", variant_id, e)
+                raise
 
     return any_notified
 
@@ -116,13 +123,13 @@ def main(argv: List[str] | None = None) -> int:
 
     config = Config.from_env(dry_run=args.dry_run, verbose=args.verbose)
 
-    logger.info("Starting stock check for %s", config.product_url)
-    logger.info("Variants to monitor: %s", config.variant_ids)
+    num_variants = sum(len(p["variants"]) for p in PRODUCTS)
+    logger.info("Starting stock check for %d product(s), %d variant(s)", len(PRODUCTS), num_variants)
 
     try:
-        notified = check_all_variants(config)
+        notified = check_all_products(config)
         if notified:
-            logger.info("Restock notification sent.")
+            logger.info("Restock notification(s) sent.")
         else:
             logger.info("No restock detected.")
         return 0

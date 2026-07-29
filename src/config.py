@@ -1,22 +1,11 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
-from typing import Dict, List
+from dataclasses import dataclass
 
 
 @dataclass
 class Config:
-    product_url: str = (
-        "https://www.yavalabs.ae/products/pure-iso-whey-2-kg?variant=46692232495329"
-    )
-    product_handle: str = "pure-iso-whey-2-kg"
-    variant_ids: List[int] = field(default_factory=lambda: [46692232495329])
-    product_title: str = "Pure ISO Whey 2 KG"
-    variant_names: Dict[int, str] = field(
-        default_factory=lambda: {46692232495329: "Banana"}
-    )
-
     state_file: str = "state.json"
 
     telegram_bot_token: str = ""

@@ -1,4 +1,9 @@
 [
+  "tests/test_products.py::TestProductsConfig::test_each_product_has_required_keys",
+  "tests/test_products.py::TestProductsConfig::test_each_variant_has_required_keys",
+  "tests/test_products.py::TestProductsConfig::test_product_urls_are_well_formed",
+  "tests/test_products.py::TestProductsConfig::test_products_is_nonempty_list",
+  "tests/test_products.py::TestProductsConfig::test_variant_ids_are_unique",
   "tests/test_shopify.py::TestExtractVariant::test_empty_variants_returns_none",
   "tests/test_shopify.py::TestExtractVariant::test_finds_available_variant",
   "tests/test_shopify.py::TestExtractVariant::test_malformed_json_missing_variants_key",
