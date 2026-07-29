@@ -3,9 +3,9 @@ __pycache__/
 *.py[cod]
 
 # Virtual environments
-venv/
-.env/
 .venv/
+venv/
+env/
 
 # IDE
 .vscode/
@@ -14,8 +14,5 @@ venv/
 # Pytest
 .pytest_cache/
 
-# OS files
+# OS
 .DS_Store
-
-# Keep stock monitor state
-# (do not ignore state.json)
